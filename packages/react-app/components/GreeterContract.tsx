@@ -1,18 +1,27 @@
-import * as React from "react";
-import { Box, Button, Divider, Grid, Typography, Link } from "@mui/material";
+import { useInput } from '@/hooks/useInput';
+import { truncateAddress } from '@/utils';
+import { useCelo } from '@celo/react-celo';
+import { Greeter } from '@local-contracts/types/Greeter';
+import {
+  Box,
+  Button,
+  Divider,
+  Grid,
+  Link,
+  Typography
+} from '@mui/material';
 
-import { useInput } from "@/hooks/useInput";
-import { useCelo } from "@celo/react-celo";
-import { useEffect, useState } from "react";
-import { SnackbarAction, SnackbarKey, useSnackbar } from "notistack";
-import { truncateAddress } from "@/utils";
-import { Greeter } from "@local-contracts/types/Greeter";
+import {
+  SnackbarAction,
+  useSnackbar
+} from 'notistack';
+import * as React from 'react';
 
 export function GreeterContract({ contractData }) {
   const { kit, address, network, performActions } = useCelo();
-  const [greeterValue, setGreeterValue] = useState<string | null>(null);
+  const [greeterValue, setGreeterValue] = React.useState<string | null>(null);
   const [greeterInput, setGreeterInput] = useInput({ type: "text" });
-  const [contractLink, setContractLink] = useState<string>("");
+  const [contractLink, setContractLink] = React.useState<string>("");
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const contract = contractData
@@ -22,7 +31,7 @@ export function GreeterContract({ contractData }) {
       ) as any as Greeter)
     : null;
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (contractData) {
       setContractLink(`${network.explorer}/address/${contractData.address}`);
     }
@@ -64,7 +73,7 @@ export function GreeterContract({ contractData }) {
         });
       });
     } catch (e) {
-      enqueueSnackbar(e.message, {variant: 'error'});
+      enqueueSnackbar(e.message, { variant: "error" });
       console.log(e);
     }
   };
@@ -93,7 +102,11 @@ export function GreeterContract({ contractData }) {
 
         <Typography variant="h6">Write Contract</Typography>
         <Box sx={{ m: 1, marginLeft: 0 }}>{setGreeterInput}</Box>
-        <Button sx={{ m: 1, marginLeft: 0 }} variant="contained" onClick={setGreeter}>
+        <Button
+          sx={{ m: 1, marginLeft: 0 }}
+          variant="contained"
+          onClick={setGreeter}
+        >
           Update Greeter Contract
         </Button>
         <Divider sx={{ m: 1 }} />
@@ -102,7 +115,11 @@ export function GreeterContract({ contractData }) {
         <Typography sx={{ m: 1, marginLeft: 0, wordWrap: "break-word" }}>
           Greeter Contract Value: {greeterValue}
         </Typography>
-        <Button sx={{ m: 1, marginLeft: 0 }} variant="contained" onClick={getGreeter}>
+        <Button
+          sx={{ m: 1, marginLeft: 0 }}
+          variant="contained"
+          onClick={getGreeter}
+        >
           Read Greeter Contract
         </Button>
       </Grid>
